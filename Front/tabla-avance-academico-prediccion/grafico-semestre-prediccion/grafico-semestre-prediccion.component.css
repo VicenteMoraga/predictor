@@ -1,0 +1,27 @@
+.texto-rojo {
+  color: red;
+}
+
+.texto-verde {
+  color: green;
+}
+
+.texto-azul {
+  color: var(--blue-700);
+}
+
+.texto-amarillo {
+  color: #856404;
+}
+
+::ng-deep .p-datatable {
+  border: 0;
+  td {
+    border: 0 !important;
+    padding: 5px !important;
+  }
+}
+
+::ng-deep .p-overlaypanel .p-overlaypanel-content {
+  padding: 5px !important;
+}

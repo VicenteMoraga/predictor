@@ -1,0 +1,239 @@
+<p-dialog
+  #dialog
+  [(visible)]="displayModal"
+  [breakpoints]="{ '960px': '100vw', '640px': '100vw' }"
+  [style]="{ width: '80vw' }"
+  [modal]="true"
+  [draggable]="false"
+  [maximizable]="true"
+  [closeOnEscape]="false"
+  (onHide)="cerrarModal()"
+  (onShow)="onShowDialog(dialog)"
+>
+  <ng-template pTemplate="header">
+    <span class="p-dialog-title">
+      Predicción desempeño
+      <span class="p-text-bold">
+        {{ asignatura.nombreAsignaturaCompleto }}</span
+      >
+      del alumno/a
+      <span class="p-text-bold">
+        {{ alumno.nombreCompleto.toUpperCase() }}</span
+      >
+    </span>
+  </ng-template>
+
+  <!-- Mensaje info de prediccion -->
+
+  <p-message
+    severity="info"
+    text="Los valores informados se calcularon teniendo en cuenta las variables CUANTITATIVAS de: Notas históricas de la asignatura, de sus prerrequisitos, del alumno solicitante, entre otras. Los valores de 'Probabilidad de aprobación' y 'Recomendación' son estimados y deben ser entendidos como una ayuda para la decisión de la solicitud."
+  ></p-message>
+
+  <!--Card Prediccion-->
+  <div class="p-grid p-d-flex p-mt-2">
+    <div class="p-col-12 p-sm-12 p-md-12 p-lg-12 p-xl-12">
+      <div *ngIf="!prediccionLista" class="p-grid">
+        <div class="p-col-6 p-sm-6 p-md-6 p-lg-3 p-xl-3">
+          <p-skeleton *ngIf="!prediccionLista" height="200px"></p-skeleton>
+        </div>
+        <div class="p-col-6 p-sm-6 p-md-6 p-lg-3 p-xl-3">
+          <p-skeleton *ngIf="!prediccionLista" height="200px"></p-skeleton>
+        </div>
+        <div class="p-col-6 p-sm-6 p-md-6 p-lg-3 p-xl-3">
+          <p-skeleton *ngIf="!prediccionLista" height="200px"></p-skeleton>
+        </div>
+        <div class="p-col-6 p-sm-6 p-md-6 p-lg-3 p-xl-3">
+          <p-skeleton *ngIf="!prediccionLista" height="200px"></p-skeleton>
+        </div>
+        <div class="p-col-6 p-sm-6 p-md-6 p-lg-3 p-xl-3">
+          <p-skeleton *ngIf="!prediccionLista" height="200px"></p-skeleton>
+        </div>
+        <div class="p-col-6 p-sm-6 p-md-6 p-lg-3 p-xl-3">
+          <p-skeleton *ngIf="!prediccionLista" height="200px"></p-skeleton>
+        </div>
+        <div class="p-col-6 p-sm-6 p-md-6 p-lg-3 p-xl-3">
+          <p-skeleton *ngIf="!prediccionLista" height="200px"></p-skeleton>
+        </div>
+        <div class="p-col-6 p-sm-6 p-md-6 p-lg-3 p-xl-3">
+          <p-skeleton *ngIf="!prediccionLista" height="200px"></p-skeleton>
+        </div>
+        <div class="p-col-12 p-sm-12 p-md-12 p-lg-3 p-xl-3">
+          <p-skeleton *ngIf="!prediccionLista" height="200px"></p-skeleton>
+        </div>
+        <div class="p-col-12 p-sm-12 p-md-12 p-lg-9 p-xl-9">
+          <p-skeleton *ngIf="!prediccionLista" height="200px"></p-skeleton>
+        </div>
+      </div>
+
+      <div *ngIf="prediccionLista" class="p-grid">
+        <div
+          *ngFor="let estadistica of estadisticasPrediccion"
+          class="p-col-6 p-sm-6 p-md-6 p-lg-3 p-xl-3"
+        >
+          <app-card-estadistica-prediccion [estadistica]="estadistica">
+          </app-card-estadistica-prediccion>
+        </div>
+      </div>
+
+      <div *ngIf="prediccionLista">
+        <div class="p-grid">
+          <div class="p-col-12 p-sm-12 p-md-12 p-lg-3 p-xl-3 p-mb-2 p-nogutter">
+            <div
+              class="p-col-12 p-sm-12 p-md-12 p-lg-12 p-xl-12 p-mb-2 card-motivo"
+            >
+              <p-card>
+                <ng-template pTemplate="header" class="card-header">
+                  <span class="font-header p-text-bold"
+                    >Motivo inscripción</span
+                  >
+                </ng-template>
+                <span class="font-content">{{ asignatura.motivo }}</span>
+              </p-card>
+            </div>
+          </div>
+          <div class="p-col-12 p-sm-12 p-md-12 p-lg-9 p-xl-9 p-mb-2">
+            <p-card>
+              <div *ngFor="let variable of prediccion.variables">
+                <p-messages
+                  *ngIf="variable.tipo == 'nota'"
+                  [severity]="variable.estatus == 'Alta' ? 'success' : 'error'"
+                >
+                  <ng-template pTemplate>
+                    <div *ngIf="variable.nombre == 'Prerrequisitos'">
+                      Nota/s de prerrequisito/s
+                      <span class="p-text-bold">{{ variable.estatus }}</span
+                      >:
+                      <div *ngFor="let prerrequisto of variable.asignaturas">
+                        <span class="p-text-bold">
+                          {{ prerrequisto.nombre }}:
+                          {{
+                            prerrequisto.nota > 0
+                              ? prerrequisto.nota
+                              : "Sin cursar"
+                          }}</span
+                        >
+                      </div>
+                    </div>
+                  </ng-template>
+                  ></p-messages
+                >
+                <p-messages
+                  *ngIf="variable.nombre == 'Relación' && variable.valido"
+                  [severity]="variable.estatus == 'Alta' ? 'success' : 'error'"
+                >
+                  <ng-template pTemplate>
+                    <span *ngIf="variable.relacion != 'Sin relacion'">
+                      La relación entre
+                      <span class="p-text-bold">{{
+                        variable.grupoDeDatos1
+                      }}</span>
+                      y
+                      <span class="p-text-bold">{{
+                        variable.grupoDeDatos2
+                      }}</span>
+                      es
+                      <span class="p-text-bold">
+                        {{ variable.negativo ? "Negativa" : "Positiva" }}
+                        {{ variable.relacion }} (Relación:
+                        {{ variable.valor }})</span
+                      >
+                      es decir, mientras
+                      <span class="p-text-bold">
+                        {{ variable.negativo ? "MENOR" : "MAYOR" }}
+                        {{ variable.grupoDeDatos1 }}</span
+                      >,
+                      <span class="p-text-bold">
+                        {{ variable.negativo ? "MAYOR" : "MAYOR" }}
+                        {{ variable.grupoDeDatos2 }}.</span
+                      ></span
+                    >
+
+                    <span *ngIf="variable.relacion == 'Sin relacion'">
+                      <span class="p-text-bold">NO EXISTE RELACIÓN</span> entre
+                      {{ variable.grupoDeDatos1 }} y
+                      {{ variable.grupoDeDatos2 }} (Relación:
+                      {{ variable.valor }}).
+                    </span>
+                  </ng-template>
+                  ></p-messages
+                >
+                <p-messages
+                  *ngIf="variable.nombre == 'Tope horario'"
+                  [severity]="variable.estatus == 'Alta' ? 'success' : 'error'"
+                >
+                  <ng-template pTemplate>
+                    <div>
+                      <span *ngIf="variable.estatus == 'Alta'"
+                        >La asignatura <span class="p-text-bold">PERMITE </span>
+                        <span class="p-text-bold">el tope de horarios</span>
+                        con:
+                      </span>
+                      <span *ngIf="variable.estatus != 'Alta'"
+                        >La asignatura
+                        <span class="p-text-bold"> NO PERMITE </span>el
+                        <span class="p-text-bold"> tope de horarios con: </span>
+                      </span>
+
+                      <div *ngFor="let asignaturaTope of variable.asignaturas">
+                        <span class="p-text-bold">
+                          {{ asignaturaTope.codigoExterno }} -
+                          {{ asignaturaTope.nombre }}</span
+                        >
+                      </div>
+                    </div>
+                  </ng-template>
+                  ></p-messages
+                ><p-messages
+                  *ngIf="variable.nombre == 'Promedio Aprobación'"
+                  [severity]="variable.estatus == 'Alta' ? 'success' : 'error'"
+                >
+                  <ng-template pTemplate>
+                    <span
+                      >De un total de
+                      <span class="p-text-bold"
+                        >{{ variable.muestra }} alumnos</span
+                      >, un
+                      <span class="p-text-bold"
+                        >{{ variable.promedioAprobacion }}% APRUEBA</span
+                      >
+                      la asignatura.</span
+                    >
+                  </ng-template>
+                  ></p-messages
+                >
+              </div></p-card
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="p-col-12 p-sm-12 p-md-12 p-lg-12 p-xl-12">
+      <p-panel
+        header="Avance académico (click para ver/cerrar)"
+        toggler="header"
+        [toggleable]="true"
+        collapsed="true"
+      >
+        <app-tabla-avance-academico-prediccion
+          [resumenAvanceSemestres]="resumenAvance"
+        ></app-tabla-avance-academico-prediccion>
+      </p-panel>
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <div class="p-d-flex p-jc-between">
+      <div class="p-mr-2"></div>
+      <div>
+        <p-button
+          (click)="cerrarModal()"
+          label="Cerrar"
+          icon="pi pi-times"
+          iconPos="left"
+          styleClass="p-button-text text-muted"
+        ></p-button>
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>

@@ -1,0 +1,48 @@
+::ng-deep .p-card {
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  box-shadow: 0 0 1px -1px rgba(0, 0, 0, 0.1), 0 1px 1px 0 rgba(0, 0, 0, 0.14),
+    0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  height: 100%;
+  .p-card-footer {
+    padding: 0 1rem 0 1rem;
+    div {
+      justify-content: center;
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  .p-card-content {
+    padding: 0;
+    font-weight: 100;
+    margin-bottom: 0;
+  }
+  .p-card-body {
+    padding: 0 1rem 0 1rem;
+  }
+  .p-card-subtitle {
+    font-weight: 300;
+    margin-bottom: 0;
+  }
+
+  .p-card-header {
+    padding: 1rem 1rem 0 1rem;
+  }
+}
+
+.font-header {
+  font-size: 1.3em;
+}
+
+::ng-deep .message-recomendacion {
+  .p-message.p-message-success {
+    background: #28a745;
+    border-width: 0px;
+    color: #ffffff;
+  }
+  .p-message.p-message-error {
+    background: #dc3545;
+    border-width: 0px;
+    color: #ffffff;
+  }
+}

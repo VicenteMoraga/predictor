@@ -1,0 +1,199 @@
+<div class="p-mb-2">
+  <span>Leyenda gráfico: </span>
+  <span *ngFor="let item of leyendaItems">
+    <p-tag class="p-mr-1" [ngClass]="item.color">
+      {{ item.value }}
+    </p-tag></span
+  >
+</div>
+
+<p-table
+  #dt1
+  [value]="resumenAvanceSemestres"
+  [rowHover]="true"
+  dataKey="id"
+  responsiveLayout="scroll"
+  styleClass="p-datatable-sm"
+>
+  <ng-template pTemplate="header">
+    <tr>
+      <th style="width: 3rem">
+        <button
+          pButton
+          class="p-ml-2 p-button-text"
+          icon="pi pi-filter-slash"
+          (click)="clearTable(dt1)"
+        ></button>
+      </th>
+      <th class="p-text-center" pSortableColumn="periodo">
+        Periodo <p-sortIcon field="periodo"></p-sortIcon>
+      </th>
+      <th class="p-text-center" pSortableColumn="semestre">
+        Semestre <p-sortIcon field="semestre"></p-sortIcon>
+      </th>
+      <th
+        class="p-text-center"
+        style="max-width: 10rem; min-width: 8rem; height: 90px"
+      >
+        Gráfica
+      </th>
+      <th class="p-text-center" pSortableColumn="asignaturasAprobadas">
+        Aprobadas <p-sortIcon field="asignaturasAprobadas"></p-sortIcon>
+      </th>
+      <th class="p-text-center" pSortableColumn="asignaturasReprobadas">
+        Reprobadas <p-sortIcon field="asignaturasReprobadas"></p-sortIcon>
+      </th>
+      <th class="p-text-center" pSortableColumn="asignaturasTotal">
+        Inscritas <p-sortIcon field="asignaturasTotal"></p-sortIcon>
+      </th>
+      <th class="p-text-center" pSortableColumn="porcentajeAprobacion">
+        Promedio Aprobación
+        <p-sortIcon field="porcentajeAprobacion"></p-sortIcon>
+      </th>
+    </tr>
+  </ng-template>
+  <ng-template
+    pTemplate="body"
+    let-resumenAvanceSemestre
+    let-expanded="expanded"
+  >
+    <tr [ngClass]="resumenAvanceSemestre.semestreCursado ? '' : 'overlay'">
+      <td>
+        <span
+          *ngIf="!resumenAvanceSemestre.semestreCursado"
+          class="text-overlay p-text-bold"
+          >Semestre no cursado</span
+        >
+        <button
+          type="button"
+          pButton
+          pRipple
+          pTooltip="Ver asignaturas"
+          tooltipPosition="top"
+          [pRowToggler]="resumenAvanceSemestre"
+          class="p-button-text p-button-rounded p-button-plain"
+          [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+          [disabled]="!resumenAvanceSemestre.semestreCursado"
+        ></button>
+      </td>
+      <td class="p-text-center">{{ resumenAvanceSemestre.periodo }}</td>
+      <td class="p-text-center">{{ resumenAvanceSemestre.semestre }}</td>
+      <td
+        class="p-text-center"
+        style="max-width: 10rem; min-width: 8rem; height: 90px"
+      >
+        <app-grafico-semestre-prediccion
+          [resumenAvanceSemestre]="resumenAvanceSemestre"
+        >
+        </app-grafico-semestre-prediccion>
+      </td>
+
+      <td class="p-text-center">
+        {{ resumenAvanceSemestre.asignaturasAprobadas }}
+      </td>
+      <td class="p-text-center">
+        {{ resumenAvanceSemestre.asignaturasReprobadas }}
+      </td>
+      <td class="p-text-center">
+        {{ resumenAvanceSemestre.asignaturasTotal }}
+      </td>
+
+      <td class="p-text-center">
+        {{
+          resumenAvanceSemestre?.porcentajeAprobacion !== -1
+            ? resumenAvanceSemestre?.porcentajeAprobacion
+            : ""
+        }}{{ resumenAvanceSemestre?.porcentajeAprobacion >= 0 ? "%" : "-" }}
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="rowexpansion" let-resumenAvanceSemestre>
+    <tr class="row-expand-background">
+      <td colspan="8">
+        <div class="p-1">
+          <p-table
+            #dt2
+            [value]="resumenAvanceSemestre.asignaturas"
+            dataKey="id"
+            responsiveLayout="scroll"
+          >
+            <ng-template pTemplate="header">
+              <tr>
+                <th style="width: 3rem">
+                  <button
+                    pButton
+                    class="p-ml-2 p-button-text"
+                    icon="pi pi-filter-slash"
+                    (click)="clearTable(dt2)"
+                  ></button>
+                </th>
+                <th pSortableColumn="nombre" style="min-width: 70%">
+                  Asignatura <p-sortIcon field="nombre"></p-sortIcon>
+                </th>
+                <th class="p-text-center" pSortableColumn="intento">
+                  Oportunidad <p-sortIcon field="intento"></p-sortIcon>
+                </th>
+                <th class="p-text-center" pSortableColumn="nota">
+                  Nota <p-sortIcon field="nota"></p-sortIcon>
+                </th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-asignatura>
+              <tr>
+                <td class="p-text-center" style="width: 5rem">
+                  {{ asignatura.codExterno }}
+                </td>
+                <td style="width: 60%">
+                  {{ asignatura.nombre }}
+                </td>
+                <td class="p-text-center">
+                  <p-tag
+                    value="1° Oportunidad"
+                    severity="success"
+                    *ngIf="asignatura.intento == 1"
+                  >
+                  </p-tag>
+                  <p-tag
+                    value="2° Oportunidad"
+                    severity="info"
+                    *ngIf="asignatura.intento == 2"
+                  >
+                  </p-tag>
+                  <p-tag
+                    value="3° Oportunidad"
+                    severity="warning"
+                    *ngIf="asignatura.intento == 3"
+                  >
+                  </p-tag>
+                  <p-tag
+                    value="4° Oportunidad"
+                    severity="danger"
+                    *ngIf="asignatura.intento == 4"
+                  >
+                  </p-tag>
+                </td>
+                <td
+                  class="p-text-center"
+                  [ngClass]="
+                    asignatura.nota == 0.0
+                      ? ''
+                      : asignatura.nota >= 4
+                      ? 'texto-verde'
+                      : 'texto-rojo'
+                  "
+                >
+                  {{ asignatura.nota == 0.0 ? "-" : asignatura.nota }}
+                </td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td colspan="6">Sin asignaturas cursadas.</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>

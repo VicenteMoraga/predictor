@@ -1,0 +1,65 @@
+.row-expand-background {
+  background: #0055ad4f !important;
+}
+.texto-rojo {
+  color: red;
+}
+
+.texto-verde {
+  color: green;
+}
+
+::ng-deep .amarillo {
+  .p-tag {
+    background: var(--yellow-300);
+    color: black;
+  }
+}
+
+::ng-deep .rojo {
+  .p-tag {
+    background: var(--red-300);
+    color: black;
+  }
+}
+
+::ng-deep .verde {
+  .p-tag {
+    background: var(--green-300);
+    color: black;
+  }
+}
+
+::ng-deep .gris {
+  .p-tag {
+    background: var(--gray-300);
+    color: black;
+  }
+}
+
+::ng-deep .overlay {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  opacity: 0.5;
+}
+
+.overlay:hover {
+  opacity: 1;
+  background-color: red;
+  .text-overlay {
+    background-color: #e9ecef;
+  }
+}
+
+.text-overlay {
+  color: black;
+  background-color: #ffff;
+  font-size: 20px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 100;
+  text-align: center;
+}

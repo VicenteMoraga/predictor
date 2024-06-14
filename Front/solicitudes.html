@@ -1,0 +1,24 @@
+<!-- Botón predictor -->
+
+<button
+  *ngIf="['solicitudInscripcion'].includes(tipo)"
+  pButton
+  type="button"
+  icon="pi pi-clock"
+  iconPos="left"
+  pTooltip="Obtener predicción"
+  tooltipPosition="left"
+  class="p-button-sm p-button-info p-mb-2"
+  (click)="onObtenerPrediccion.emit(asignatura)"
+></button>
+
+<!-- pop-up predicción-->
+
+<app-modal-prediccion-asignatura
+  *ngIf="showModalPrediccion"
+  [asignatura]="asignaturaPrediccion"
+  [alumno]="alumno"
+  [indicadores]="indicadores"
+  [inscripcionFinal]="getAsignaturasFinalSolicitud"
+  (onCerrar)="showModalPrediccion = false"
+></app-modal-prediccion-asignatura>

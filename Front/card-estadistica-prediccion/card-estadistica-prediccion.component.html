@@ -1,0 +1,85 @@
+<p-card>
+  <ng-template pTemplate="header" class="card-header">
+    <span class="font-header p-text-bold">{{ estadistica.nombre }}</span>
+  </ng-template>
+  <span *ngIf="estadistica.nombre == 'Porcentaje de aprobación histórico'"
+    >Promedio histórico de aprobación de la asignatura a inscribir</span
+  >
+  <span *ngIf="estadistica.nombre == 'Promedio notas de aprobados histórico'"
+    >Nota promedio histórica de los alumnos que aprobaron la asignatura</span
+  >
+  <span
+    *ngIf="estadistica.nombre == 'Relación nota prerrequisito/nota asignatura'"
+    >Relación entre el promedio de notas de prerrequisitos y nota de final de la
+    asignatura (muestra: <span>{{ estadistica.muestra }} registros</span> )
+  </span>
+  <span
+    *ngIf="
+      estadistica.nombre == 'Relación alumnos inscritos/aprobación asignatura'
+    "
+    >Relación entre la cantidad de alumnos inscritos y porcentaje de aprobación
+    la asignatura (muestra:
+    <span>{{ estadistica.muestra }} registros</span> )</span
+  >
+  <span *ngIf="estadistica.nombre == 'Probabilidad de aprobación'"
+    >Probabilidad del alumno de aprobar la asignatura a inscribir</span
+  >
+  <span *ngIf="estadistica.nombre == 'Promedio notas de prerrequisito alumno'"
+    >Nota promedio del alumno en los prerrequisitos de la asignatura</span
+  >
+  <span *ngIf="estadistica.nombre == 'Cupo asignatura/alumnos inscritos'"
+    >Cupo máximo de la asignatura y cantidad de alumnos inscritos en la
+    asignatura</span
+  >
+  <span *ngIf="estadistica.nombre == 'Recomendación'">{{
+    estadistica.valor.mensaje
+  }}</span>
+  <ng-template pTemplate="footer">
+    <div *ngIf="estadistica.valido">
+      <h1
+        *ngIf="
+          estadistica.nombre != 'Cupo asignatura/alumnos inscritos' &&
+          estadistica.nombre != 'Recomendación'
+        "
+      >
+        {{ estadistica.valor
+        }}{{ estadistica.tipo == "probabilidad" ? "%" : "" }}
+      </h1>
+      <h1 *ngIf="estadistica.nombre == 'Cupo asignatura/alumnos inscritos'">
+        {{ estadistica.valor.cupo }}/{{ estadistica.valor.cantidadAlumnos }}
+      </h1>
+
+      <div
+        class="message-recomendacion"
+        *ngIf="estadistica.nombre == 'Recomendación'"
+      >
+        <p-messages
+          [severity]="
+            estadistica.valor.valor == 'RECHAZAR SOLICITUD'
+              ? 'error'
+              : 'success'
+          "
+        >
+          <ng-template pTemplate>
+            <span class="p-text-bold">{{ estadistica.valor.valor }}</span>
+          </ng-template>
+          ></p-messages
+        >
+      </div>
+
+      <div *ngIf="tag">
+        <p-tag
+          class="p-ml-1"
+          [value]="tag.label"
+          [icon]="tag.icon"
+          [severity]="tag.severity"
+        ></p-tag>
+      </div>
+    </div>
+    <div *ngIf="!estadistica.valido">
+      <h2>
+        {{ estadistica.mensaje }}
+      </h2>
+    </div>
+  </ng-template>
+</p-card>
